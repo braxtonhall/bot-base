@@ -5,6 +5,9 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
+  "engines": {
+    "node": ">= 16 < 17"
+  },
   "types": "dist/index.d.ts",
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
@@ -21,7 +24,7 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "discord.js": "^12.5.3",
+    "discord.js": "13.1.0",
     "nedb": "^1.8.0"
   }
 }

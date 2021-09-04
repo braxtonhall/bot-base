@@ -2,12 +2,15 @@
 
 ## Example
 ### App
+
 ```typescript
-import {startDiscord} from "@ubccpsc310/bot-base"
+import {startDiscord} from "@ubccpsc310/bot-base";
+import {Intents} from "discord.js";
 
 startDiscord({
     commandDirectory: `${__dirname}/commands`,
     listenerDirectory: `${__dirname}/listeners`,
+    intents: [Intents.FLAGS.GUILDS],
     token: process.env.DISCORD_BOT_TOKEN,
 });
 ```
@@ -45,7 +48,7 @@ const ready: Listener<"ready"> = {
     procedure: function (client: Client) {
         console.info("Bot started 👀");
     }
-}
+};
 
 export default ready;
 ```
@@ -80,6 +83,9 @@ interface Options {
     // All files in this directory should have
     // a default export that is a Listener
     listenerDirectory: string;
+    
+    // See https://discord.js.org/#/docs/main/stable/typedef/IntentsResolvable
+    intents: IntentsResolvable;
 
     // Bot token found in Discord's
     // developer portal
