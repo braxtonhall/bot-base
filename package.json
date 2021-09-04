@@ -2,7 +2,7 @@
   "name": "@ubccpsc310/bot-base",
   "description": "Make a quick and dirty discord bot",
   "homepage": "https://github.com/braxtonhall/bot-base",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "license": "MIT",
   "engines": {
