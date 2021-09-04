@@ -2,8 +2,8 @@ import {Listener} from "../Listener";
 import {Client, Message} from "discord.js";
 import PrefixController from "../../controllers/PrefixController";
 
-const mentionBot: Listener<"message"> = {
-    event: "message",
+const mentionBot: Listener<"messageCreate"> = {
+    event: "messageCreate",
     procedure: (client: Client) => async (message: Message) => {
         if (message.author.bot === false && !message.reference && message.mentions.has(client.user.id)) {
             console.info(`${message.author.username} mentioned the bot`);
