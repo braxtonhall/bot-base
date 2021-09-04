@@ -33,7 +33,9 @@ const displayCommandUsage = (prefix: string, commandName: string) => {
 };
 
 const displayAllCommands = (prefix: string) => {
-    const commands: Command[] = listCommands();
+    const commands: Command[] = listCommands()
+        .sort((a, b) =>
+            a.name < b.name ? -1 : 1);
     const embed = new MessageEmbed()
         .setTitle("Commands")
         .addFields(...commands.map(toHelpLine(prefix)))
