@@ -19,8 +19,13 @@ const registerListeners = async (client: Client, directory: string): Promise<Cli
         .map((importedFile) => importedFile.default)
         .forEach((listener) => {
             if (isListener(listener)) {
-                client.on(listener.event, <T extends Event>(...args: ClientEvents[T]) =>
-                    listener.procedure(client, ...args));
+                client.on(listener.event, async <T extends Event>(...args: ClientEvents[T]) => {
+                    try {
+                        await listener.procedure(client, ...args);
+                    } catch (err) {
+                        console.error(`Listener for "${listener.event}" threw. Reason:`, err);
+                    }
+                });
                 console.info(`Registered listener for "${listener.event}"`);
             }
         });

@@ -22,10 +22,11 @@ const help: Command = {
 const displayCommandUsage = (prefix: string, commandName: string) => {
     const command: Command = getCommand(commandName);
     if (command) {
-        return new MessageEmbed()
+        const embed = new MessageEmbed()
             .setTitle(`\`${prefix}${commandName}\``)
             .setDescription(command.description)
             .addField("Usage", `\`${prefix}${command.usage}\``);
+        return {embeds: [embed]};
     } else {
         return `No such command: \`${commandName}\``;
     }
@@ -33,10 +34,11 @@ const displayCommandUsage = (prefix: string, commandName: string) => {
 
 const displayAllCommands = (prefix: string) => {
     const commands: Command[] = listCommands();
-    return new MessageEmbed()
+    const embed = new MessageEmbed()
         .setTitle("Commands")
         .addFields(...commands.map(toHelpLine(prefix)))
         .addField('\u200B', `Use \`${prefix}help <commandName>\` for usage`);
+    return {embeds: [embed]};
 };
 
 const toHelpLine = (prefix: string) => (command: Command): {name: string, value: string, inline: true} => {
