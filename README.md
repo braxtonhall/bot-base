@@ -24,7 +24,7 @@ const echo: Command = {
     name: "echo",
     description: "Repeats a message",
     usage: "echo <message>?",
-    procedure: (client: Client, message: Message, args: string[]) => {
+    procedure(client: Client, message: Message, args: string[]) {
         let reply;
         if (args.length > 0) {
             reply = args.join(" ");
@@ -45,7 +45,7 @@ import {Client} from "discord.js";
 
 const ready: Listener<"ready"> = {
     event: "ready",
-    procedure: function (client: Client) {
+    procedure(client: Client) {
         console.info("Bot started 👀");
     }
 };
