@@ -4,7 +4,7 @@ import PrefixController from "../../controllers/PrefixController";
 
 const mentionBot: Listener<"messageCreate"> = {
     event: "messageCreate",
-    procedure: (client: Client) => async (message: Message) => {
+    procedure: async (client: Client, message: Message) => {
         if (message.author.bot === false && !message.reference && message.mentions.has(client.user.id)) {
             console.info(`${message.author.username} mentioned the bot`);
             const prefix = await PrefixController.getPrefix();
