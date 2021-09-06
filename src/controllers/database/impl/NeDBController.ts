@@ -1,5 +1,6 @@
 import Datastore from "nedb";
 import {Collection, DatabaseController, Entity} from "../DatabaseController";
+import Log from "../../../util/Log";
 
 type DBRow = any & {_id: string, deleted: boolean};
 
@@ -29,7 +30,7 @@ const _get = async <T extends Entity>(collectionName: Collection, id: string): P
     const prefixCollection = getCollection(collectionName);
     const query = {id, deleted: false};
     const document = await promisifyNeDB<DBRow>(prefixCollection.findOne.bind(prefixCollection))(query);
-    console.debug("Retrieved:", document?.id, "from", collectionName);
+    Log.debug("Retrieved:", document?.id, "from", collectionName);
     if (document) {
         delete document._id;
         delete document.deleted;
@@ -46,20 +47,20 @@ const _scan = async <T extends Entity>(collectionName: Collection, userQuery: an
         delete entry.deleted;
         return entry;
     });
-    console.info(`Retrieved ${documents.length} from ${collectionName}`);
+    Log.info(`Retrieved ${documents.length} from ${collectionName}`);
     return entries;
 };
 
 const _set = async <T extends Entity>(collectionName: Collection, item: T): Promise<void> => {
     const {id} = item;
-    console.debug(`Setting ${id} in ${collectionName}`);
+    Log.debug(`Setting ${id} in ${collectionName}`);
     const row = {...item, deleted: false};
     const collection = getCollection(collectionName);
     return promisifyNeDB<void>(collection.update.bind(collection))({id}, row, {upsert: true});
 };
 
 const _delete = (collectionName: Collection, id: string): Promise<void> => {
-    console.debug(`Deleting ${id} in the db from ${collectionName}`);
+    Log.debug(`Deleting ${id} in the db from ${collectionName}`);
     const collection = getCollection(collectionName);
     return promisifyNeDB<void>(collection.update.bind(collection))({id}, {$set: {deleted: true}}, {});
 };

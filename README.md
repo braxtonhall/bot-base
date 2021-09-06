@@ -40,13 +40,13 @@ export default echo;
 
 ### Listener
 ```typescript
-import {Listener} from "@ubccpsc310/bot-base";
+import {Listener, Log} from "@ubccpsc310/bot-base";
 import {Client} from "discord.js";
 
 const ready: Listener<"ready"> = {
     event: "ready",
     procedure(client: Client) {
-        console.info("Bot started 👀");
+        Log.info("Bot started 👀");
     }
 };
 
@@ -72,6 +72,20 @@ function startDiscord(options: Options): Promise<Client> {
 function getDatabaseController(): DatabaseController {
     // ...
 }
+
+/**
+ * Logging object used in place of `console`
+ * Only prints to console if logging level permits,
+ * set by process.env variable `LOG_LEVEL`
+ * which should be DEBUG | INFO | WARN | ERROR | NONE
+ * (defaults to NONE)
+ */
+const Log: {
+    debug(...args: any[]): void;
+    info(...args: any[]): void;
+    warn(...args: any[]): void;
+    error(...args: any[]): void;
+} = { /* ... */ };
 
 interface Options {
     // Directory where Command ts/js files live
@@ -111,10 +125,10 @@ interface Listener<T extends keyof ClientEvents> {
 }
 
 interface DatabaseController {
-    get<T extends Entity>(collection: Collection, id: string): Promise<T>;
-    set<T extends Entity>(collection: Collection, value: T): Promise<void>;
-    scan<T extends Entity>(collection: Collection, query: any): Promise<T[]>;
-    delete(collection: Collection, id: string): Promise<void>;
+    get<T extends Entity>(collection: string, id: string): Promise<T>;
+    set<T extends Entity>(collection: string, value: T): Promise<void>;
+    scan<T extends Entity>(collection: string, query: any): Promise<T[]>;
+    delete(collection: string, id: string): Promise<void>;
 }
 
 interface Entity {

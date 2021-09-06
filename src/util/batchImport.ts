@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import Log from "./Log";
 
 const batchImport = (directory: string): Promise<any[]> => {
     try {
@@ -12,7 +13,7 @@ const batchImport = (directory: string): Promise<any[]> => {
             .map((file) => import(`${directory}/${file}`));
         return Promise.all(futureImportedFiles);
     } catch (err) {
-        console.error(`Trouble importing from "${directory}":`, err);
+        Log.error(`Trouble importing from "${directory}":`, err);
         return Promise.resolve([]);
     }
 };

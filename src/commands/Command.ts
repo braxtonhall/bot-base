@@ -1,6 +1,7 @@
-import {batchImport} from "../util/Util";
+import {batchImport} from "../util/batchImport";
 import {Client, Message} from "discord.js";
 import PrefixController from "../controllers/PrefixController";
+import Log from "../util/Log";
 
 interface Command {
     name: string;
@@ -31,7 +32,7 @@ const registerCommands = async (client: Client, directory: string): Promise<Clie
         .forEach((command) => {
         if (isCommand(command)) {
             commands.set(command.name, command);
-            console.info(`Registered command "${command.name}"`);
+            Log.info(`Registered command "${command.name}"`);
         }
     });
     return client;

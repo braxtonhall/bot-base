@@ -1,5 +1,6 @@
-import {batchImport} from "../util/Util";
+import {batchImport} from "../util/batchImport";
 import {Client, ClientEvents, Constants} from "discord.js";
+import Log from "../util/Log";
 
 type Event = keyof ClientEvents;
 
@@ -31,10 +32,10 @@ const registerListeners = async (client: Client, directory: string): Promise<Cli
                     try {
                         await listener.procedure(client, ...args);
                     } catch (err) {
-                        console.error(`Listener for "${listener.event}" threw. Reason:`, err);
+                        Log.error(`Listener for "${listener.event}" threw. Reason:`, err);
                     }
                 });
-                console.info(`Registered listener for "${listener.event}"`);
+                Log.info(`Registered listener for "${listener.event}"`);
             }
         });
     return client;
