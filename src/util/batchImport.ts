@@ -3,10 +3,11 @@ import Log from "./Log";
 
 const batchImport = (directory: string): Promise<any[]> => {
     try {
-        const allFiles = fs.readdirSync(directory);
-        const jsFiles = allFiles
+        const filePaths = readDir(directory);
+        const fileNames = filePaths.map((path) => path.replace(directory, ""));
+        const jsFiles = fileNames
             .filter((name) => name.match(/\.js$/));
-        const tsFiles = allFiles
+        const tsFiles = fileNames
             .filter((name) => name.match(/\.ts$/));
         const files = jsFiles.length > 0 ? jsFiles : tsFiles;
         const futureImportedFiles = files
@@ -16,6 +17,18 @@ const batchImport = (directory: string): Promise<any[]> => {
         Log.error(`Trouble importing from "${directory}":`, err);
         return Promise.resolve([]);
     }
+};
+
+const readDir = (directory: string): string[] => {
+    const entries = fs.readdirSync(directory);
+    return entries.flatMap((entry) => {
+        const path = `${directory}/${entry}`;
+        if (fs.statSync(path).isDirectory()) {
+            return readDir(path);
+        } else {
+            return path;
+        }
+    });
 };
 
 export {batchImport};
