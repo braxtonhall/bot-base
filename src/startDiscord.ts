@@ -1,8 +1,8 @@
 import {
 	BitFieldResolvable,
 	Client,
-	IntentsString,
-	PartialTypes,
+	GatewayIntentsString,
+	Partials,
 } from "discord.js";
 import { registerCommands } from "./commands/Command";
 import { registerListeners } from "./listeners/Listener";
@@ -10,9 +10,9 @@ import { registerListeners } from "./listeners/Listener";
 type Options = {
 	commandDirectory: string;
 	listenerDirectory: string;
-	intents: BitFieldResolvable<IntentsString, number>;
+	intents: BitFieldResolvable<GatewayIntentsString, number>;
 	token: string;
-	partials?: PartialTypes[];
+	partials?: Partials[];
 };
 
 const startDiscord = async (options: Options): Promise<Client> => {
