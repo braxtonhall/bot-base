@@ -33,7 +33,6 @@
 		"nedb": "^1.8.0"
 	},
 	"lint-staged": {
-		"*.ts": "eslint --cache --fix",
 		"*.{yml,md,json,ts,js,html}": "prettier --write"
 	}
 }
