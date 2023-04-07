@@ -1,0 +1,9 @@
+.editorconfig
+.eslintignore
+.eslintrc
+.husky/
+.idea/
+.prettierignore
+src/
+tsconfig.json
+*.tgz
