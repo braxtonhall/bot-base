@@ -1,3 +1,6 @@
+import { Client } from "discord.js";
+import { debounce } from "debounce";
+
 enum LogLevel {
 	DEBUG,
 	INFO,
@@ -15,28 +18,65 @@ const LOG_LEVEL: LogLevel =
 		NONE: LogLevel.NONE,
 	}[process.env.LOG_LEVEL] ?? LogLevel.NONE;
 
-const debug = (...msg: any[]): void => {
+const debug = (...msg: unknown[]): void => {
 	if (LOG_LEVEL <= LogLevel.DEBUG) {
-		console.debug(`<🐞> ${new Date().toLocaleString()}:`, ...msg);
+		log("debug", "🐞", ...msg);
 	}
 };
 
-const info = (...msg: any[]): void => {
+const info = (...msg: unknown[]): void => {
 	if (LOG_LEVEL <= LogLevel.INFO) {
-		console.info(`<ℹ> ${new Date().toLocaleString()}:`, ...msg);
+		log("info", "ℹ", ...msg);
 	}
 };
 
-const warn = (...msg: any[]): void => {
+const warn = (...msg: unknown[]): void => {
 	if (LOG_LEVEL <= LogLevel.WARN) {
-		console.warn(`<⚠️> ${new Date().toLocaleString()}:`, ...msg);
+		log("warn", "⚠", ...msg);
 	}
 };
 
-const error = (...msg: any[]): void => {
+const error = (...msg: unknown[]): void => {
 	if (LOG_LEVEL <= LogLevel.ERROR) {
-		console.error(`<❌> ${new Date().toLocaleString()}:`, ...msg);
+		log("error", "❌", ...msg);
 	}
 };
 
-export default { debug, info, warn, error };
+const listeners: { client: Client; channelId: string }[] = [];
+
+let messageQueue: string[] = [];
+
+const log = (
+	method: "debug" | "info" | "warn" | "error",
+	emoji: string,
+	...msg
+): void => {
+	const prefix = `<${emoji}> ${new Date().toLocaleString()}:`;
+	console[method](prefix, ...msg);
+	const message = [
+		prefix,
+		msg.map((message) => JSON.stringify(message)),
+	].join(" ");
+	messageQueue.push(message);
+	void logToListeners();
+};
+
+const logToListeners = debounce(async () => {
+	const message = messageQueue.join("\n");
+	messageQueue = [];
+	const futureChannels = listeners.map(({ client, channelId }) =>
+		client.channels.fetch(channelId)
+	);
+	const maybeChannels = await Promise.all(futureChannels);
+	const channels = maybeChannels.filter((channel) => !!channel);
+	channels.forEach((channel) => {
+		if (channel.isText()) {
+			void channel.send(message);
+		}
+	});
+}, 1000);
+
+const stream = (client: Client, channelId: string) =>
+	void listeners.push({ client, channelId });
+
+export default { debug, info, warn, error, stream };

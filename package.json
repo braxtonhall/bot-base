@@ -11,6 +11,7 @@
 	"types": "dist/index.d.ts",
 	"devDependencies": {
 		"@tsconfig/node14": "^1.0.1",
+		"@types/debounce": "^1.2.1",
 		"@types/nedb": "^1.8.11",
 		"@types/node": "^18.15.11",
 		"@typescript-eslint/eslint-plugin": "^5.57.1",
@@ -29,6 +30,7 @@
 		"prepare": "husky install"
 	},
 	"dependencies": {
+		"debounce": "^1.2.1",
 		"discord.js": "13.1.0",
 		"nedb": "^1.8.0"
 	},
