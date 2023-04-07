@@ -2,6 +2,7 @@ import { batchImport } from "../util/batchImport";
 import { Client, Message } from "discord.js";
 import PrefixController from "../controllers/PrefixController";
 import Log from "../util/Log";
+import RecursionController from "../controllers/RecursionController";
 
 interface Command {
 	name: string;
@@ -49,11 +50,14 @@ const getCommand = (command: string): Command => commands.get(command);
 const listCommands = (): Command[] => Array.from(commands.values());
 
 const isCommandFormatted = async (message: Message): Promise<boolean> => {
-	const prefix = await PrefixController.getPrefix();
+	const [prefix, recursive] = await Promise.all([
+		PrefixController.getPrefix(),
+		RecursionController.isRecursionAllowed(),
+	]);
 	// is from a person and is prefixed and is from a guild
 	return (
 		message.guild &&
-		message.author.bot === false &&
+		(recursive || message.author.bot === false) &&
 		message.content.trim().startsWith(prefix)
 	);
 };
