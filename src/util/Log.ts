@@ -74,7 +74,7 @@ const logToListeners = debounce(async () => {
 			void channel.send(message);
 		}
 	});
-}, 1000);
+}, 3000);
 
 const stream = (client: Client, channelId: string) =>
 	void listeners.push({ client, channelId });
