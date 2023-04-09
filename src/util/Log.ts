@@ -55,7 +55,7 @@ const log = (method: "debug" | "info" | "warn" | "error", emoji: string, ...msg)
 };
 
 const logToListeners = debounce(async () => {
-	const message = messageQueue.join("\n");
+	const message = messageQueue.map((msg) => `${msg}`).join("\n");
 	messageQueue = [];
 	const futureChannels = listeners.map(({client, channelId}) => client.channels.fetch(channelId));
 	const maybeChannels = await Promise.all(futureChannels);
