@@ -1,5 +1,5 @@
-import { Client } from "discord.js";
-import { debounce } from "debounce";
+import {Client} from "discord.js";
+import {debounce} from "debounce";
 
 enum LogLevel {
 	DEBUG,
@@ -42,21 +42,14 @@ const error = (...msg: unknown[]): void => {
 	}
 };
 
-const listeners: { client: Client; channelId: string }[] = [];
+const listeners: {client: Client; channelId: string}[] = [];
 
 let messageQueue: string[] = [];
 
-const log = (
-	method: "debug" | "info" | "warn" | "error",
-	emoji: string,
-	...msg
-): void => {
+const log = (method: "debug" | "info" | "warn" | "error", emoji: string, ...msg): void => {
 	const prefix = `<${emoji}> ${new Date().toLocaleString()}:`;
 	console[method](prefix, ...msg);
-	const message = [
-		prefix,
-		...msg.map((message) => JSON.stringify(message)),
-	].join(" ");
+	const message = [prefix, ...msg.map((message) => JSON.stringify(message))].join(" ");
 	messageQueue.push(message);
 	void logToListeners();
 };
@@ -64,9 +57,7 @@ const log = (
 const logToListeners = debounce(async () => {
 	const message = messageQueue.join("\n");
 	messageQueue = [];
-	const futureChannels = listeners.map(({ client, channelId }) =>
-		client.channels.fetch(channelId)
-	);
+	const futureChannels = listeners.map(({client, channelId}) => client.channels.fetch(channelId));
 	const maybeChannels = await Promise.all(futureChannels);
 	const channels = maybeChannels.filter((channel) => !!channel);
 	channels.forEach((channel) => {
@@ -76,7 +67,6 @@ const logToListeners = debounce(async () => {
 	});
 }, 3000);
 
-const stream = (client: Client, channelId: string) =>
-	void listeners.push({ client, channelId });
+const stream = (client: Client, channelId: string) => void listeners.push({client, channelId});
 
-export default { debug, info, warn, error, stream };
+export default {debug, info, warn, error, stream};

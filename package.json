@@ -36,5 +36,10 @@
 	},
 	"lint-staged": {
 		"*.{yml,md,json,ts,js,html}": "prettier --write"
+	},
+	"prettier": {
+		"useTabs": true,
+		"printWidth": 120,
+		"bracketSpacing": false
 	}
 }

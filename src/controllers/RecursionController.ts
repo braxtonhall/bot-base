@@ -1,6 +1,6 @@
-import { createController } from "./Controller";
+import {createController} from "./Controller";
 
-const { getValue, setValue } = createController({
+const {getValue, setValue} = createController({
 	defaultValue: false,
 	name: "recursion",
 });

@@ -1,8 +1,8 @@
 import Datastore from "nedb";
-import { Collection, DatabaseController, Entity } from "../DatabaseController";
+import {Collection, DatabaseController, Entity} from "../DatabaseController";
 import Log from "../../../util/Log";
 
-type DBRow = any & { _id: string; deleted: boolean };
+type DBRow = any & {_id: string; deleted: boolean};
 
 const collections: Map<Collection, Datastore> = new Map();
 
@@ -18,9 +18,7 @@ const getCollection = (collection: Collection): Datastore => {
 };
 
 const promisifyNeDB =
-	<T>(
-		fn: (...args: [...any[], (e, r: T) => void]) => void
-	): ((...args: any[]) => Promise<T>) =>
+	<T>(fn: (...args: [...any[], (e, r: T) => void]) => void): ((...args: any[]) => Promise<T>) =>
 	(...args: any[]) =>
 		new Promise((resolve, reject) => {
 			const callback = (err, result) => {
@@ -33,15 +31,10 @@ const promisifyNeDB =
 			fn(...args, callback);
 		});
 
-const _get = async <T extends Entity>(
-	collectionName: Collection,
-	id: string
-): Promise<T> => {
+const _get = async <T extends Entity>(collectionName: Collection, id: string): Promise<T> => {
 	const prefixCollection = getCollection(collectionName);
-	const query = { id, deleted: false };
-	const document = await promisifyNeDB<DBRow>(
-		prefixCollection.findOne.bind(prefixCollection)
-	)(query);
+	const query = {id, deleted: false};
+	const document = await promisifyNeDB<DBRow>(prefixCollection.findOne.bind(prefixCollection))(query);
 	Log.debug("Retrieved:", document?.id, "from", collectionName);
 	if (document) {
 		delete document._id;
@@ -54,7 +47,7 @@ const _scan = async <T extends Entity>(
 	collectionName: Collection,
 	userQuery: Record<string, unknown>
 ): Promise<T[]> => {
-	const query = { ...userQuery, deleted: false };
+	const query = {...userQuery, deleted: false};
 	const cursor = getCollection(collectionName).find(query);
 	const documents = await promisifyNeDB<DBRow[]>(cursor.exec.bind(cursor))();
 	const entries: T[] = documents.map((entry): T => {
@@ -66,29 +59,18 @@ const _scan = async <T extends Entity>(
 	return entries;
 };
 
-const _set = async <T extends Entity>(
-	collectionName: Collection,
-	item: T
-): Promise<void> => {
-	const { id } = item;
+const _set = async <T extends Entity>(collectionName: Collection, item: T): Promise<void> => {
+	const {id} = item;
 	Log.debug(`Setting ${id} in ${collectionName}`);
-	const row = { ...item, deleted: false };
+	const row = {...item, deleted: false};
 	const collection = getCollection(collectionName);
-	return promisifyNeDB<void>(collection.update.bind(collection))(
-		{ id },
-		row,
-		{ upsert: true }
-	);
+	return promisifyNeDB<void>(collection.update.bind(collection))({id}, row, {upsert: true});
 };
 
 const _delete = (collectionName: Collection, id: string): Promise<void> => {
 	Log.debug(`Deleting ${id} in the db from ${collectionName}`);
 	const collection = getCollection(collectionName);
-	return promisifyNeDB<void>(collection.update.bind(collection))(
-		{ id },
-		{ $set: { deleted: true } },
-		{}
-	);
+	return promisifyNeDB<void>(collection.update.bind(collection))({id}, {$set: {deleted: true}}, {});
 };
 
 export const NeDBController: DatabaseController = {

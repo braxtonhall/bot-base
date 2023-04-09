@@ -1,5 +1,5 @@
-import { Client, Message } from "discord.js";
-import { Command } from "../Command";
+import {Client, Message} from "discord.js";
+import {Command} from "../Command";
 import PrefixController from "../../controllers/PrefixController";
 
 const prefix: Command = {

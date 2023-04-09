@@ -8,9 +8,7 @@ const batchImport = (directory: string): Promise<any[]> => {
 		const jsFiles = fileNames.filter((name) => name.match(/\.js$/));
 		const tsFiles = fileNames.filter((name) => name.match(/\.ts$/));
 		const files = jsFiles.length > 0 ? jsFiles : tsFiles;
-		const futureImportedFiles = files.map(
-			(file) => import(`${directory}/${file}`)
-		);
+		const futureImportedFiles = files.map((file) => import(`${directory}/${file}`));
 		return Promise.all(futureImportedFiles);
 	} catch (err) {
 		Log.error(`Trouble importing from "${directory}":`, err);
@@ -30,4 +28,4 @@ const readDir = (directory: string): string[] => {
 	});
 };
 
-export { batchImport };
+export {batchImport};

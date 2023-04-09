@@ -1,7 +1,7 @@
-import { NeDBController } from "./impl/NeDBController";
+import {NeDBController} from "./impl/NeDBController";
 
 export type Collection = string;
-export type Entity = { id: string };
+export type Entity = {id: string};
 
 export interface DatabaseController {
 	get<T extends Entity>(collection: Collection, id: string): Promise<T>;
