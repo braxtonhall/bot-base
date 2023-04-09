@@ -6,7 +6,6 @@ import {
 } from "discord.js";
 import { registerCommands } from "./commands/Command";
 import { registerListeners } from "./listeners/Listener";
-import { Log } from "./index";
 
 type Options = {
 	commandDirectory: string;
@@ -14,7 +13,6 @@ type Options = {
 	intents: BitFieldResolvable<GatewayIntentsString, number>;
 	token: string;
 	partials?: Partials[];
-	logChannel?: string;
 };
 
 const startDiscord = async (options: Options): Promise<Client> => {
@@ -27,9 +25,6 @@ const startDiscord = async (options: Options): Promise<Client> => {
 		listenerDirectory
 	);
 	await withListeners.login(token);
-	if (options.logChannel) {
-		Log.stream(client, options.logChannel);
-	}
 	return client;
 };
 
