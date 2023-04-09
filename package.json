@@ -1,30 +1,45 @@
 {
-  "name": "@ubccpsc310/bot-base",
-  "description": "Make a quick and dirty discord bot",
-  "homepage": "https://github.com/braxtonhall/bot-base",
-  "version": "1.0.10",
-  "main": "dist/index.js",
-  "license": "MIT",
-  "engines": {
-    "node": ">= 16 < 17"
-  },
-  "types": "dist/index.d.ts",
-  "devDependencies": {
-    "@tsconfig/node14": "^1.0.1",
-    "@types/nedb": "^1.8.11",
-    "@types/node": "^14.11.8",
-    "@typescript-eslint/eslint-plugin": "^4.4.1",
-    "@typescript-eslint/parser": "^4.4.1",
-    "eslint": "^7.11.0",
-    "typescript": "4.4.2"
-  },
-  "scripts": {
-    "build": "tsc",
-    "fix": "yarn lint --fix",
-    "lint": "eslint src --ext .ts"
-  },
-  "dependencies": {
-    "discord.js": "13.1.0",
-    "nedb": "^1.8.0"
-  }
+	"name": "@ubccpsc310/bot-base",
+	"description": "Make a quick and dirty discord bot",
+	"homepage": "https://github.com/braxtonhall/bot-base",
+	"version": "1.1.0",
+	"main": "dist/index.js",
+	"license": "MIT",
+	"engines": {
+		"node": ">= 16.14"
+	},
+	"types": "dist/index.d.ts",
+	"devDependencies": {
+		"@tsconfig/node14": "^1.0.1",
+		"@types/debounce": "^1.2.1",
+		"@types/nedb": "^1.8.11",
+		"@types/node": "^18.15.11",
+		"@typescript-eslint/eslint-plugin": "^5.57.1",
+		"@typescript-eslint/parser": "^5.57.1",
+		"eslint": "^8.37.0",
+		"eslint-config-prettier": "^8.8.0",
+		"husky": "^8.0.3",
+		"lint-staged": ">=10",
+		"prettier": "^2.8.7",
+		"typescript": "5.0.4"
+	},
+	"scripts": {
+		"build": "tsc",
+		"fix": "yarn lint --fix",
+		"lint": "eslint src --ext .ts",
+		"prepare": "husky install"
+	},
+	"dependencies": {
+		"debounce": "^1.2.1",
+		"discord.js": "14.9.0",
+		"nedb": "^1.8.0"
+	},
+	"lint-staged": {
+		"*.{yml,md,json,ts,js,html}": "prettier --write"
+	},
+	"prettier": {
+		"useTabs": true,
+		"printWidth": 120,
+		"bracketSpacing": false
+	}
 }
