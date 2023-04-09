@@ -23,7 +23,7 @@ const recursive: Command = {
 			try {
 				const argument = parseArgument(input);
 				await RecursionController.setRecursionAllowed(argument);
-				reply = `Prefix has been updated to \`${argument}\``;
+				reply = argument ? "Recursion enabled" : "Recursion disabled";
 			} catch (err) {
 				reply = err.message;
 			}

@@ -13,17 +13,9 @@ const isListener = (maybeListener: any): maybeListener is Listener =>
 	Object.values(Events).includes(maybeListener?.event) && !!maybeListener?.procedure?.call;
 
 const registerListeners = async (client: Client, directory: string): Promise<Client> => {
-	const [futureBatchImportedFiles, futureCommand, futureMentionBot] = [
-		batchImport(directory),
-		import(`${__dirname}/impl/command`),
-		import(`${__dirname}/impl/mentionBot`),
-	];
-	const [batchImportedFiles, command, mentionBot] = await Promise.all([
-		futureBatchImportedFiles,
-		futureCommand,
-		futureMentionBot,
-	]);
-	const importedFiles = [command, mentionBot, ...batchImportedFiles];
+	const [futureUserImports, futureServiceImports] = [batchImport(directory), batchImport(`${__dirname}/impl`)];
+	const [userImports, serviceImports] = await Promise.all([futureUserImports, futureServiceImports]);
+	const importedFiles = [...serviceImports, ...userImports];
 	importedFiles
 		.map((importedFile) => importedFile.default)
 		.forEach((listener) => {

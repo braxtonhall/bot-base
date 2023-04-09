@@ -16,14 +16,10 @@ const isCommand = (maybeCommand: any): maybeCommand is Command =>
 
 const commands: Map<string, Command> = new Map();
 const registerCommands = async (client: Client, directory: string): Promise<Client> => {
-	const [futureBatchImportedFiles, futureHelp, futurePrefix] = [
-		batchImport(directory),
-		import(`${__dirname}/impl/help`),
-		import(`${__dirname}/impl/prefix`),
-	];
-	const [batchImportedFiles, help, prefix] = await Promise.all([futureBatchImportedFiles, futureHelp, futurePrefix]);
+	const [futureUserImports, futureServiceImports] = [batchImport(directory), batchImport(`${__dirname}/impl`)];
+	const [userImports, serviceImports] = await Promise.all([futureUserImports, futureServiceImports]);
 	// Put help and prefix first so they can be overridden
-	const importedFiles = [help, prefix, ...batchImportedFiles];
+	const importedFiles = [...serviceImports, ...userImports];
 	importedFiles
 		.map((importedFile) => importedFile.default)
 		.forEach((command) => {

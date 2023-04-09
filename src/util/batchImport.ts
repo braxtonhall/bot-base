@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import Log from "./Log";
 
-const batchImport = (directory: string): Promise<any[]> => {
+const batchImport = (directory: string): Promise<Record<string, unknown>[]> => {
 	try {
 		const filePaths = readDir(directory);
 		const fileNames = filePaths.map((path) => path.replace(directory, ""));
