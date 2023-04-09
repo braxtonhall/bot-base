@@ -1,5 +1,5 @@
 import { batchImport } from "../util/batchImport";
-import { Client, ClientEvents, Constants } from "discord.js";
+import { Client, ClientEvents, Events } from "discord.js";
 import Log from "../util/Log";
 
 type Event = keyof ClientEvents;
@@ -10,7 +10,7 @@ interface Listener<T extends Event = Event> {
 }
 
 const isListener = (maybeListener: any): maybeListener is Listener =>
-	Object.values(Constants.Events).includes(maybeListener?.event) &&
+	Object.values(Events).includes(maybeListener?.event) &&
 	!!maybeListener?.procedure?.call;
 
 const registerListeners = async (

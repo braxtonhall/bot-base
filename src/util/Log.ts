@@ -55,7 +55,7 @@ const log = (
 	console[method](prefix, ...msg);
 	const message = [
 		prefix,
-		msg.map((message) => JSON.stringify(message)),
+		...msg.map((message) => JSON.stringify(message)),
 	].join(" ");
 	messageQueue.push(message);
 	void logToListeners();
@@ -70,7 +70,7 @@ const logToListeners = debounce(async () => {
 	const maybeChannels = await Promise.all(futureChannels);
 	const channels = maybeChannels.filter((channel) => !!channel);
 	channels.forEach((channel) => {
-		if (channel.isText()) {
+		if (channel.isTextBased()) {
 			void channel.send(message);
 		}
 	});

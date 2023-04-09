@@ -1,5 +1,5 @@
 import { Command, getCommand, listCommands } from "../Command";
-import { Client, Message, MessageEmbed } from "discord.js";
+import { Client, Message, EmbedBuilder } from "discord.js";
 import PrefixController from "../../controllers/PrefixController";
 
 const help: Command = {
@@ -22,10 +22,13 @@ const help: Command = {
 const displayCommandUsage = (prefix: string, commandName: string) => {
 	const command: Command = getCommand(commandName);
 	if (command) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle(`\`${prefix}${commandName}\``)
 			.setDescription(command.description)
-			.addField("Usage", `\`${prefix}${command.usage}\``);
+			.addFields({
+				name: "Usage",
+				value: `\`${prefix}${command.usage}\``,
+			});
 		return { embeds: [embed] };
 	} else {
 		return `No such command: \`${commandName}\``;
@@ -36,10 +39,12 @@ const displayAllCommands = (prefix: string) => {
 	const commands: Command[] = listCommands().sort((a, b) =>
 		a.name < b.name ? -1 : 1
 	);
-	const embed = new MessageEmbed()
+	const embed = new EmbedBuilder()
 		.setTitle("Commands")
-		.addFields(...commands.map(toHelpLine(prefix)))
-		.addField("\u200B", `Use \`${prefix}help <commandName>\` for usage`);
+		.addFields(...commands.map(toHelpLine(prefix)), {
+			name: "\u200B",
+			value: `Use \`${prefix}help <commandName>\` for usage`,
+		});
 	return { embeds: [embed] };
 };
 
