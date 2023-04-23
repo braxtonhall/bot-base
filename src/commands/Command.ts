@@ -48,7 +48,7 @@ const parseCommandNameAndArgs = async (message: Message): Promise<{commandName: 
 	const prefix = await PrefixController.getPrefix();
 	const contentWithoutPrefix = message.content.replace(prefix, "");
 	const trimmedContent = contentWithoutPrefix.trim();
-	const tokens = trimmedContent.split(" ").filter((s) => !!s);
+	const tokens = trimmedContent.split(/\s/).filter((s) => !!s);
 	const commandName = tokens[0] ?? "";
 	const args = tokens.slice(1);
 	return {commandName, args};
